@@ -11,13 +11,5 @@
         <source>Provide integration in OS X 10.8 system</source>
         <translation>Предоставляет интеграцию с системой OS X 10.8</translation>
     </message>
-    <message>
-        <source>Show</source>
-        <translation>Показать</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Закрыть</translation>
-    </message>
 </context>
 </TS>

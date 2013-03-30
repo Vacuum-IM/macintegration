@@ -11,13 +11,5 @@
         <source>Provide integration in OS X 10.8 system</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Show</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 </TS>

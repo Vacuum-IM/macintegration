@@ -18,8 +18,6 @@ struct NotificationStrings {
 	QString title;
 	QString subtitle;
 	QString message;
-	QString buttonShow;
-	QString buttonClose;
 };
 
 class MacNotify : public QObject

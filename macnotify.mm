@@ -70,9 +70,6 @@ void MacNotify::showNSUserNotification(const NotificationStrings strings, int AN
 	userNotification.title = [NSString stringWithCharacters:(const unichar *)strings.title.unicode() length:(NSUInteger)strings.title.length()];
 	userNotification.subtitle = [NSString stringWithCharacters:(const unichar *)strings.subtitle.unicode() length:(NSUInteger)strings.subtitle.length()];
 	userNotification.informativeText = [NSString stringWithCharacters:(const unichar *)strings.message.unicode() length:(NSUInteger)strings.message.length()];
-	userNotification.hasActionButton = YES;
-	userNotification.actionButtonTitle = [NSString stringWithCharacters:(const unichar *)strings.buttonShow.unicode() length:(NSUInteger)strings.buttonShow.length()];
-	userNotification.otherButtonTitle  = [NSString stringWithCharacters:(const unichar *)strings.buttonClose.unicode() length:(NSUInteger)strings.buttonClose.length()];
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithInt:ANotifyId], @"notifyId", nil];
 	[userNotification setUserInfo:userInfo];
 

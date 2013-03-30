@@ -29,9 +29,11 @@ public:
 
 public:
 	QPointer<MacNotify> FMacNotify;
-
 	//INotificationHandler
 	virtual bool showNotification(int AOrder, ushort AKind, int ANotifyId, const INotification &ANotification);
+
+protected:
+	QString filter(const QString &text);
 
 protected slots:
 	void notifyClicked(int notifyId);
@@ -40,10 +42,6 @@ protected slots:
 private:
 	IOptionsManager *FOptionsManager;
 	INotifications *FNotifications;
-
-private:
-	QString FButtonShow;
-	QString FButtonClose;
 
 };
 

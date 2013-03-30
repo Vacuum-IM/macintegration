@@ -11,13 +11,5 @@
         <source>Provide integration in OS X 10.8 system</source>
         <translation>Provide integration in OS X 10.8 system</translation>
     </message>
-    <message>
-        <source>Show</source>
-        <translation>Show</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>Close</translation>
-    </message>
 </context>
 </TS>
