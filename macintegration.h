@@ -36,8 +36,8 @@ protected:
 	QString filter(const QString &text);
 
 protected slots:
-	void notifyClicked(int notifyId);
-	void notifyAboutToRemove(int notifyId);
+	void onNotifyClicked(int notifyId, QString profile);
+	void onNotificationRemoved(int notifyId);
 
 private:
 	IOptionsManager *FOptionsManager;

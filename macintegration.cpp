@@ -38,8 +38,8 @@ bool MacIntegration::initConnections(IPluginManager *APluginManager, int &AInitO
 	if(plugin)
 	{
 		FNotifications = qobject_cast<INotifications *>(plugin->instance());
-		connect (FNotifications->instance(), SIGNAL(notificationActivated(int)),this,SLOT(notifyAboutToRemove(int)));
-		connect (FNotifications->instance(), SIGNAL(notificationRemoved(int)),this,SLOT(notifyAboutToRemove(int)));
+		connect (FNotifications->instance(), SIGNAL(notificationActivated(int)),this,SLOT(onNotificationRemoved(int)));
+		connect (FNotifications->instance(), SIGNAL(notificationRemoved(int)),this,SLOT(onNotificationRemoved(int)));
 	}
 
 	return true;
@@ -49,7 +49,7 @@ bool MacIntegration::initObjects()
 {
 	FNotifications->insertNotificationHandler(NHO_MACINTEGRATION, this);
 	FMacNotify = new MacNotify(this);
-	connect(FMacNotify,SIGNAL(clicked(int)),this,SLOT(notifyClicked(int)));
+	connect(FMacNotify,SIGNAL(clicked(int, QString)),this,SLOT(onNotifyClicked(int, QString)));
 
 	return true;
 }
@@ -65,19 +65,19 @@ bool MacIntegration::showNotification(int AOrder, ushort AKind, int ANotifyId, c
 		filter(ANotification.data.value(NDR_POPUP_HTML).toString()),
 	};
 
-
-	FMacNotify->showNSUserNotification(strings, ANotifyId);
+	FMacNotify->showNSUserNotification(strings, FOptionsManager->currentProfile(), ANotifyId);
 	return true;
 }
 
-void MacIntegration::notifyClicked(int notifyId)
+void MacIntegration::onNotifyClicked(int notifyId, QString profile)
 {
-	FNotifications->activateNotification(notifyId);
+	if (profile == FOptionsManager->currentProfile())
+		FNotifications->activateNotification(notifyId);
 }
 
-void MacIntegration::notifyAboutToRemove(int notifyId)
+void MacIntegration::onNotificationRemoved(int notifyId)
 {
-	FMacNotify->removeNotification(notifyId);
+	FMacNotify->removeNotification(notifyId, FOptionsManager->currentProfile());
 }
 
 QString MacIntegration::filter(const QString &text)

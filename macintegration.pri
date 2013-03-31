@@ -1,5 +1,6 @@
 HEADERS = macintegration.h \
-		  macnotify.h
+		  macnotify.h \
+    macstringhelper.h
 
 SOURCES = macintegration.cpp
 

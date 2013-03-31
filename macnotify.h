@@ -1,12 +1,11 @@
 #ifndef NOTIFY_H
 #define NOTIFY_H
 
+#import <objc/runtime.h>
+
 #include <QObject>
 #include <QString>
 #include <QDebug>
-#include <QMap>
-
-#import <objc/runtime.h>
 
 #ifdef __OBJC__
 @class MacNotificationCenterDelegate;
@@ -30,12 +29,12 @@ public:
 	MacNotificationCenterDelegate *MacNotifyWrapped;
 
 public:
-	void notificationClicked(int notifyId);
-	void removeNotification(int notifyId);
-	void showNSUserNotification(const NotificationStrings strings, int ANotifyId);
+	void notificationClicked(int notifyId, QString profile);
+	void removeNotification(int notifyId, QString profile);
+	void showNSUserNotification(const NotificationStrings strings, QString profile, int ANotifyId);
 
 signals:
-	void clicked(int notifyId);
+	void clicked(int notifyId, QString profile);
 
 };
 
