@@ -1,7 +1,7 @@
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 
-#include "macstringhelper.h"
+#include "machelper.h"
 #include "macnotify.h"
 
 @interface MacNotificationCenterDelegate : NSObject <NSUserNotificationCenterDelegate> {
@@ -17,9 +17,7 @@
 - (MacNotificationCenterDelegate*) initialise:(MacNotify*)observer
 {
 	if ( (self = [super init]) )
-	{
 		self->MacNotifyObserver = observer;
-	}
 	return self;
 }
 
@@ -45,10 +43,8 @@
 	{
 		if ([[[deliveredUserNotification userInfo] objectForKey:@"profile"] isEqualToString:profile])
 		if ([[[deliveredUserNotification userInfo] objectForKey:@"notifyId"] isEqualToNumber:uniqueID])
-		{
 			[notificationCenter removeDeliveredNotification:deliveredUserNotification];
-		}
-  }
+	}
 }
 
 @end
@@ -56,7 +52,7 @@
 MacNotify::MacNotify(QObject *parent) : QObject(parent)
 {
 	MacNotificationCenterDelegate* macDelegate = [[MacNotificationCenterDelegate alloc] initialise: this];
-	MacNotifyWrapped = macDelegate;
+	MacNotificationCenterWrapped = macDelegate;
 	[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:macDelegate];
 	[[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
 }
@@ -66,12 +62,14 @@ MacNotify::~MacNotify()
 	[[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
 }
 
-void MacNotify::showNSUserNotification(const NotificationStrings strings, QString profile, int ANotifyId)
+void MacNotify::showNSUserNotification(const NotificationData data, QString profile, int ANotifyId)
 {
 	NSUserNotification *userNotification = [[NSUserNotification alloc] init];
-	userNotification.title = toNSString(strings.title);
-	userNotification.subtitle = toNSString(strings.subtitle);
-	userNotification.informativeText = toNSString(strings.message);
+	userNotification.title = toNSString(data.title);
+	userNotification.subtitle = toNSString(data.subtitle);
+	userNotification.informativeText = toNSString(data.message);
+	if (!data.pixmap.isNull())
+		userNotification.contentImage = toNSImage(data.pixmap);
 	NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithInt:ANotifyId], @"notifyId", toNSString(profile), @"profile", nil];
 	[userNotification setUserInfo:userInfo];
 
@@ -85,6 +83,6 @@ void MacNotify::notificationClicked(int notifyId, QString profile)
 
 void MacNotify::removeNotification(int notifyId, QString profile)
 {
-	[MacNotifyWrapped removeOldNotificationWithID:[NSNumber numberWithInt:notifyId] andProfile:toNSString(profile)];
+	[MacNotificationCenterWrapped removeOldNotificationWithID:[NSNumber numberWithInt:notifyId] andProfile:toNSString(profile)];
 }
 

@@ -32,9 +32,6 @@ public:
 	//INotificationHandler
 	virtual bool showNotification(int AOrder, ushort AKind, int ANotifyId, const INotification &ANotification);
 
-protected:
-	QString filter(const QString &text);
-
 protected slots:
 	void onNotifyClicked(int notifyId, QString profile);
 	void onNotificationRemoved(int notifyId);

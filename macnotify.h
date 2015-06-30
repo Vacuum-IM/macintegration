@@ -1,11 +1,11 @@
-#ifndef NOTIFY_H
-#define NOTIFY_H
+#ifndef MACNOTIFY_H
+#define MACNOTIFY_H
 
 #import <objc/runtime.h>
 
 #include <QObject>
 #include <QString>
-#include <QDebug>
+#include <QPixmap>
 
 #ifdef __OBJC__
 @class MacNotificationCenterDelegate;
@@ -13,10 +13,11 @@
 typedef struct objc_object MacNotificationCenterDelegate;
 #endif
 
-struct NotificationStrings {
+struct NotificationData {
 	QString title;
 	QString subtitle;
 	QString message;
+	QPixmap pixmap;
 };
 
 class MacNotify : public QObject
@@ -26,16 +27,16 @@ public:
 	explicit MacNotify(QObject *parent = 0);
 	~MacNotify();
 
-	MacNotificationCenterDelegate *MacNotifyWrapped;
+	MacNotificationCenterDelegate *MacNotificationCenterWrapped;
 
 public:
 	void notificationClicked(int notifyId, QString profile);
 	void removeNotification(int notifyId, QString profile);
-	void showNSUserNotification(const NotificationStrings strings, QString profile, int ANotifyId);
+	void showNSUserNotification(const NotificationData data, QString profile, int ANotifyId);
 
 signals:
 	void clicked(int notifyId, QString profile);
 
 };
 
-#endif // NOTIFY_H
+#endif // MACNOTIFY_H

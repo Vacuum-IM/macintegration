@@ -59,13 +59,14 @@ bool MacIntegration::showNotification(int AOrder, ushort AKind, int ANotifyId, c
 	if (AOrder != NHO_MACINTEGRATION || !(AKind & INotification::PopupWindow))
 		return false;
 
-	NotificationStrings strings = {
+	NotificationData data = {
 		ANotification.data.value(NDR_POPUP_CAPTION).toString(),
 		ANotification.data.value(NDR_POPUP_TITLE).toString(),
-		filter(ANotification.data.value(NDR_POPUP_HTML).toString()),
+		ANotification.data.value(NDR_POPUP_TEXT).toString(),
+		QPixmap::fromImage(qvariant_cast<QImage>(ANotification.data.value(NDR_POPUP_IMAGE)))
 	};
 
-	FMacNotify->showNSUserNotification(strings, FOptionsManager->currentProfile(), ANotifyId);
+	FMacNotify->showNSUserNotification(data, FOptionsManager->currentProfile(), ANotifyId);
 	return true;
 }
 
@@ -78,39 +79,6 @@ void MacIntegration::onNotifyClicked(int notifyId, QString profile)
 void MacIntegration::onNotificationRemoved(int notifyId)
 {
 	FMacNotify->removeNotification(notifyId, FOptionsManager->currentProfile());
-}
-
-QString MacIntegration::filter(const QString &text)
-{
-	QString out = text;
-	out.replace(QLatin1Char('\n'), QString());
-	out.replace(QLatin1String("</p>"), QLatin1String("\n"), Qt::CaseInsensitive);
-	out.replace(QLatin1String("<br />"), QLatin1String("\n"), Qt::CaseInsensitive);
-
-	int lt = 0;
-	int gt = 0;
-	forever
-	{
-		lt = out.indexOf(QLatin1Char('<'), lt);
-		if (lt == -1)
-			break;
-		gt = out.indexOf(QLatin1Char('>'), lt);
-		if (gt == -1)
-		{
-			out.remove(lt, out.size() - lt);
-			break;
-		}
-		out.remove(lt, gt - lt + 1);
-	}
-
-  out.replace(QLatin1String("&gt;"), QLatin1String(">"));
-  out.replace(QLatin1String("&lt;"), QLatin1String("<"));
-  out.replace(QLatin1String("&quot;"), QLatin1String("\""));
-  out.replace(QLatin1String("&nbsp;"), QLatin1String(" "));
-  out.replace(QLatin1String("&amp;"), QLatin1String("&"));
-  out.replace(QChar(QChar::Nbsp), QLatin1String(" "));
-  out = out.trimmed();
-  return out;
 }
 
 Q_EXPORT_PLUGIN2(plg_macintegration, MacIntegration)
